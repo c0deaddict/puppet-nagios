@@ -22,7 +22,7 @@ class nagios::check::crm (
 
   nagios::service { "check_crm_${check_title}":
     ensure                   => $ensure,
-    check_command            => 'check_npre_crm',
+    check_command            => 'check_nrpe_crm',
     service_description      => 'pacemaker',
     servicegroups            => $servicegroups,
     check_period             => $check_period,
