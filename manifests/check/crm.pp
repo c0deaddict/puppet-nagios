@@ -16,6 +16,7 @@ class nagios::check::crm (
     ensure   => $ensure,
     perl     => true,
     sudo_cmd => $crm_mon_bin,
+    package  => ['perl-Nagios-Plugin'],
   }
 
   nagios::client::nrpe_file { 'check_crm':
