@@ -1,6 +1,7 @@
 class nagios::check::crm (
   $ensure                   = undef,
   $args                     = '',
+  $crm_mon_bin              = $::nagios::params::crm_mon_bin,
   $check_title              = $::nagios::client::host_name,
   $servicegroups            = undef,
   $check_period             = $::nagios::client::service_check_period,
@@ -12,7 +13,9 @@ class nagios::check::crm (
 ) inherits ::nagios::client {
 
   nagios::client::nrpe_plugin { 'check_crm':
-    ensure => $ensure,
+    ensure   => $ensure,
+    perl     => true,
+    sudo_cmd => $crm_mon_bin,
   }
 
   nagios::client::nrpe_file { 'check_crm':

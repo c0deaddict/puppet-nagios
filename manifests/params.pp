@@ -43,6 +43,8 @@ class nagios::params {
     'nagios-plugins-users',
   ]
 
+  $crm_mon_bin = '/usr/sbin/crm_mon -1 -r -f'
+
   case $::operatingsystem {
     'RedHat', 'Fedora', 'CentOS', 'Scientific', 'Amazon': {
       $nrpe_package       = [ 'nrpe', 'nagios-plugins' ]
@@ -119,4 +121,3 @@ class nagios::params {
   }
 
 }
-
