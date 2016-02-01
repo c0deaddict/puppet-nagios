@@ -14,6 +14,7 @@ class nagios::check::haproxy (
   nagios::client::nrpe_plugin { 'check_haproxy':
     ensure   => $ensure,
     perl     => true,
+    sudo_cmd => "${::nagios::client::plugin_dir}/check_haproxy",
   }
 
   nagios::client::nrpe_file { 'check_haproxy':
