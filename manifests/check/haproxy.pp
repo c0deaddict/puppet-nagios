@@ -19,6 +19,7 @@ class nagios::check::haproxy (
   nagios::client::nrpe_file { 'check_haproxy':
     ensure => $ensure,
     args   => $args,
+    sudo   => true,
   }
 
   nagios::service { "check_haproxy_${check_title}":
