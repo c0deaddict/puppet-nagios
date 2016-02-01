@@ -38,17 +38,21 @@ def main(argv):
   o.add_option('-P', '--port', action='store', type='int', dest='port', default=6082, help='The port varnishadm is listening on')
   o.add_option('-s', '--secret', action='store', type='string', dest='secret', default='/etc/varnish/secret', help='The path to the secret file')
   o.add_option('-p', '--path', action='store', type='string', dest='path', default='/usr/bin/varnishadm', help='The path to the varnishadm binary')
+  o.add_option('-i', '--ignore', action='store', type='string', dest='ignore', default=None, help='Ignore the status of this backend')
 
-  options=o.parse_args()[0]
+  options = o.parse_args()[0]
+  ignore = options.ignore if isinstance(options.ignore, list) else [options.ignore]
   command = runcommand("%(path)s -S %(secret)s -T %(host)s:%(port)s debug.health" % options.__dict__)
   backends = command.split("\n")
   backends_healthy, backends_sick = [], []
   for line in backends:
-    if line.startswith("Backend") and line.find("test")==-1:
-      if line.endswith("Healthy"):
-        backends_healthy.append(line.split(" ")[1])
-      else:
-        backends_sick.append(line.split(" ")[1])
+    if line.startswith("Backend"):
+      backend = line.split(" ")[1]
+      if backend not in ignore:
+        if line.endswith("Healthy"):
+          backends_healthy.append(backend)
+        else:
+          backends_sick.append(backend)
 
   if backends_sick:
     print "%s backends are down.  %s" % (len(backends_sick), "".join(backends_sick))
