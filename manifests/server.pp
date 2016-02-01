@@ -799,6 +799,12 @@ class nagios::server (
   nagios_command {'check_nrpe_crm':
     command_line => "${nrpe} -c check_crm",
   }
+  nagios_command {'check_nrpe_haproxy':
+    command_line => "${nrpe} -c check_haproxy",
+  }
+  nagios_command {'check_nrpe_varnish':
+    command_line => "${nrpe} -c check_varnish",
+  }
 
   # Nagios contacts and contactgroups
   # Taken from contacts.cfg
