@@ -1,9 +1,10 @@
 define nagios::check::http_url (
   $ensure                   = $::nagios_check_http_url_ensure,
   $host                     = $::nagios::client::host_name,
+  $vhost                    = $::nagios::client::host_name,
   $url                      = '/',
   $port                     = 80,
-  $args                     = '',
+  $extra_args               = '',
   $servicegroups            = $::nagios_check_http_url_servicegroups,
   $check_period             = $::nagios_check_http_url_check_period,
   $contact_groups           = $::nagios::client::service_contact_groups,
@@ -15,7 +16,7 @@ define nagios::check::http_url (
 
   nagios::service { "check_http_url_${title}_${host}":
     ensure                   => $ensure,
-    check_command            => "check_http_url!${host}!${port}!${url}!${args}",
+    check_command            => "check_http_url!${vhost}!${port}!${url}!${extra_args}",
     service_description      => "check_http_url_${title}",
     servicegroups            => $servicegroups,
     check_period             => $check_period,

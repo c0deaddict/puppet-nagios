@@ -428,7 +428,7 @@ class nagios::server (
     command_line => '$USER1$/check_dns -H $ARG1$ $ARG2$',
   }
   nagios_command { 'check_http_url':
-    command_line => '$USER1$/check_http -H $ARG1$ -p $ARG2$ -u $ARG3$ $ARG4$',
+    command_line => '$USER1$/check_http -H $ARG1$ -p $ARG2$ -u $ARG3$ $ARG4$ $HOSTADDRESS$',
   }
   nagios_command { 'check_proxy':
     command_line => '$USER1$/check_tcp -H $HOSTADDRESS$ -p $ARG1$',
