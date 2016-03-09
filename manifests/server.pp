@@ -86,6 +86,7 @@ class nagios::server (
   $plugin_dir           = $::nagios::params::plugin_dir,
   $plugin_nginx         = false,
   $plugin_xcache        = false,
+  $plugin_esx           = false,
   $selinux              = $::selinux,
   # Original template entries
   $template_generic_contact = {},
@@ -152,6 +153,25 @@ class nagios::server (
     }
   } else {
     file { "${plugin_dir}/check_xcache":
+      ensure => absent,
+    }
+  }
+  if $plugin_esx {
+    file { "${plugin_dir}/check_esx_wbem":
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0755',
+      content => template('nagios/plugins/check_esx_wbem'),
+    }
+    package { 'python-pip':
+      ensure => installed,
+    } ->
+    package { 'pywbem':
+      provider => pip,
+      ensure => installed,
+    }
+  } else {
+    file { "${plugin_dir}/check_esx_wbem":
       ensure => absent,
     }
   }
@@ -435,6 +455,9 @@ class nagios::server (
   }
   nagios_command { 'check_nginx':
     command_line => '$USER1$/check_nginx $ARG1$',
+  }
+  nagios_command { 'check_esx_wbem':
+    command_line => '$USER1$/check_esx_wbem https://$HOSTADDRESS$:5989 $ARG1$ $ARG2$ $ARG3$ $ARG4$ $ARG5$ $ARG6$',
   }
   # Custom NRPE-based commands
   nagios_command { 'check_nrpe_users':
