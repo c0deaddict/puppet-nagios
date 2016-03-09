@@ -69,10 +69,14 @@ if len(sys.argv) >= 5 :
 
 	ignore_elements = sys.argv[ignores_index:]
 
+password = sys.argv[3]
+if password.startswith('/'):
+    with open(password, 'r') as f:
+        password = f.readline().strip()
 
 # connection to host
 verboseoutput("Connection to "+sys.argv[1], verbose)
-wbemclient = pywbem.WBEMConnection(sys.argv[1], (sys.argv[2], sys.argv[3]), NS)
+wbemclient = pywbem.WBEMConnection(sys.argv[1], (sys.argv[2], password), NS)
 
 # run the check for each defined class
 GlobalStatus = ExitOK
